@@ -22,7 +22,18 @@ func (assertion *Assertion) fail() {
 	assertion.Passed = false
 	assertion.testFunc.Status = STATUS_FAIL
 	logError(&Error{assertion.suite, assertion.testFunc, assertion})
-	runtime.Goexit()
+}
+
+// Must exits the test if the given assertion is false
+func (s *Suite) Must(result *Assertion, messages ...string) *Assertion {
+	assertion := s.setup(fmt.Sprintf("Assertion failed with 'Must'"), messages)
+	if !result.Passed {
+		result.testFunc.Status = STATUS_FAIL
+		assertion.fail()
+		runtime.Goexit()
+	}
+
+	return assertion
 }
 
 // Not asserts the given assertion is false.
