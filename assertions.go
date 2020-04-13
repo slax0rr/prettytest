@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime"
 	"strings"
 )
 
@@ -21,6 +22,7 @@ func (assertion *Assertion) fail() {
 	assertion.Passed = false
 	assertion.testFunc.Status = STATUS_FAIL
 	logError(&Error{assertion.suite, assertion.testFunc, assertion})
+	runtime.Goexit()
 }
 
 // Not asserts the given assertion is false.
